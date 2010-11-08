@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Testing peptide class</title>
+		<script type="text/javascript" src="lib/ext3/ext-base.js"></script>
+		<script type="text/javascript" src="lib/ext3/ext-all.js"></script>
+		<script type="text/javascript" src="../jsprot/constants.js"></script>
+		<script type="text/javascript" src="../jsprot/XProtBase.js"></script>
+		<script type="text/javascript" src="../jsprot/Peptide.js"></script>
+		<script type="text/javascript" src="../jsprot/ModifiedPeptide.js"></script>
+	</head>
+	<body>
+		
+		
+		<script type="text/javascript">
+			document.writeln('<h1>Testing validation</h1>');
+			
+			var pep = new mpimp.jsprot.Peptide();
+			var seq = 'HGYIGEFEYVDDHR';
+			document.writeln('Peptide: '+seq+'<br />');
+			if (pep.validateSequence(seq) === true) {
+				document.writeln('TRUE<br />');
+			} else {
+				document.writeln('FALSE<br />');
+			}
+			
+			var seq = 'HXGYIGEFEYVDDHR';
+			document.writeln('Peptide: '+seq+'<br />');
+			if (pep.validateSequence(seq) === true) {
+				document.writeln('TRUE<br />');
+			} else {
+				document.writeln('FALSE<br />');
+			}
+			
+			var seq = 'HGYIGEF4EYVDDHR';
+			document.writeln('Peptide: '+seq+'<br />');
+			if (pep.validateSequence(seq) === true) {
+				document.writeln('TRUE<br />');
+			} else {
+				document.writeln('FALSE<br />');
+			}
+			
+			var seq = 'HGYIGEFEYV*DDHR';
+			document.writeln('Peptide: '+seq+'<br />');
+			if (pep.validateSequence(seq) === true) {
+				document.writeln('TRUE<br />');
+			} else {
+				document.writeln('FALSE<br />');
+			}
+			
+			
+			var pep = new mpimp.jsprot.Peptide();
+			pep.Sequence = 'HGYIGEFEYVDDHR';
+			pep.NTerminus = 'H';
+			pep.CTerminus = 'OH';
+			
+			document.writeln('<h1>Testing naked peptide</h1>');
+			document.writeln('Peptide: '+pep.Sequence+'<br />');
+			document.writeln('N-Terminus: '+pep.NTerminus+'<br />');
+			document.writeln('C-Terminus: '+pep.CTerminus+'<br />');
+			
+			document.writeln('<h3>Masses monoisotopic</h3>');
+			document.writeln('Mass C-Terminus: '+String(pep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(pep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(pep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(pep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average</h3>');
+			document.writeln('Mass C-Terminus: '+String(pep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(pep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(pep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(pep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			var modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.Sequence = 'ITLLEELQEKTEEDEENKPSVIEK';
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			var objMod1 = {accession: 21, position: 1};
+			
+			
+			document.writeln('<h1>Testing phosphat modification</h1>');
+			document.writeln('Peptide: '+modpep.Sequence+'<br />');
+			document.writeln('N-Terminus: '+modpep.NTerminus+'<br />');
+			document.writeln('C-Terminus: '+modpep.CTerminus+'<br />');
+			document.writeln('Modification 1: '+String(objMod1.accession)+'<br />');
+			
+			
+			document.writeln('<h3>Masses monoisotopic without Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average without Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep.addModification(objMod1);
+			
+			document.writeln('<h3>Masses monoisotopic with Phosphat - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average with Phosphat - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.Sequence = 'ITLLEELQ';
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			
+			document.writeln('<h1>Testing 15N Modification</h1>');
+			document.writeln('Peptide: '+modpep.Sequence+'<br />');
+			document.writeln('N-Terminus: '+modpep.NTerminus+'<br />');
+			document.writeln('C-Terminus: '+modpep.CTerminus+'<br />');
+			document.writeln('Modification X: 15N<br />');
+			
+			document.writeln('<h3>Masses monoisotopic without 15N - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average without 15N - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep.add15NModifications();
+			
+			document.writeln('<h3>Masses monoisotopic with 15N - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average with 15N - Modifications</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.Sequence = 'KDEPAEESDGDLGFGLFD';
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			objMod1 = {accession: 21, position: 7};
+			
+			document.writeln('<h1>Testing phosphat data</h1>');
+			document.writeln('Peptide: '+modpep.Sequence+'<br />');
+			document.writeln('N-Terminus: '+modpep.NTerminus+'<br />');
+			document.writeln('C-Terminus: '+modpep.CTerminus+'<br />');
+			document.writeln('Modification 1: '+String(objMod1.accession)+' at '+String(objMod1.position)+'<br />');
+			
+			document.writeln('<h3>Masses monoisotopic without Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average without Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep.addModification(objMod1);
+			
+			document.writeln('<h3>Masses monoisotopic with Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average with Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.setModifiedSequence('KDEPAEE(pS)DGDLGFGLFD');
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			
+			document.writeln('<h1>Testing phosphat data (using the modseq detector)</h1>');
+			document.writeln('<h3>Masses monoisotopic with Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			document.writeln('<h3>Masses average with Phospho mod</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('average'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('average'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('average'))+'<br />');
+			document.writeln('Calculated MCR 3: '+String(modpep.getTheoreticalMCR('monoisotopic', 3))+'<br />');
+			
+			document.writeln('<h1>Other tests</h1>');
+			
+			pep = new mpimp.jsprot.Peptide();
+			pep.Sequence ='LSNSGDAKVR';
+			pep.NTerminus = 'H';
+			pep.CTerminus = 'OH';
+			
+			document.writeln('<h3>Test for '+pep.Sequence+'</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.setModifiedSequence('LSN(pS)GDAKVR');
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			
+			document.writeln('<h3>Test for '+modpep.Sequence+' with Phosphosite</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.setModifiedSequence('(pS)YTNLLDLASGNFPVMGR');
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			
+			document.writeln('<h3>Test for '+modpep.Sequence+' with Phosphosite</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			modpep = new mpimp.jsprot.ModifiedPeptide();
+			modpep.setModifiedSequence('VNIKAPGD(pS)PNTDGIK');
+			modpep.NTerminus = 'H';
+			modpep.CTerminus = 'OH';
+			
+			document.writeln('<h3>Test for '+modpep.Sequence+' with Phosphosite</h3>');
+			document.writeln('Mass C-Terminus: '+String(modpep.getCTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Mass N-Terminus: '+String(modpep.getNTerminusMass('monoisotopic'))+'<br />');
+			document.writeln('Peptide mass: '+String(modpep.getMass('monoisotopic'))+'<br />');
+			document.writeln('Calculated MCR 2: '+String(modpep.getTheoreticalMCR('monoisotopic', 2))+'<br />');
+			
+			
+		</script>
+	</body>
+</html>

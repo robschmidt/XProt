@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<constants>
+	<aminoacids>
+		<aminoacid id="aa_A" shortcut="A" name="alanine" weight_monoiso=71.03711 weight_ave=71.0788 />
+		<aminoacid id="aa_C" shortcut="C" name="cysteine" weight_monoiso=103.00919 weight_ave=103.1388 />
+	</aminoacids>
+</constants>
